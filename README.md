@@ -1,36 +1,56 @@
 # scudlib
 
-FIXME: description
+Scudlib is an implementation of the Paillier algorithm for basic homomorphic encryption. 
+
+On the roadmap is to add other algorithms, and to modularize the functions for generating keys
 
 ## Installation
 
-Download from http://example.com/FIXME.
+This is a pretty straightforward install.  Making sure [Leiningen](https://leiningen.org/) is installed, simply clone the repo, and type `lein repl`.
 
 ## Usage
 
-FIXME: explanation
+To do basic encryption, you first need to generate keys: 
 
-    $ java -jar scudlib-0.1.0-standalone.jar [args]
+```
+(def mykeys (generateKeys 100))
+```
+Where 100 is the number of bits. This should generate a hash like this: 
 
-## Options
+```
+{:pub {:bits 100, :n 595667010391440934419099824371, :n2 354819187268677002147288563688095410977685067815803045545641, :np1 595667010391440934419099824372, :rncache []}, :sec {:lambda 19855567013047979005325077740, :pubkey {:bits 100, :n 595667010391440934419099824371, :n2 354819187268677002147288563688095410977685067815803045545641, :np1 595667010391440934419099824372, :rncache []}, :x 563557312431137071852827229601}}
+```
 
-FIXME: listing of options this app accepts.
+I find it useful to separate the public and private keys: 
 
-## Examples
+```
+(def pubkey (:pub mykeys))
 
-...
+(def privkey (:sec mykeys))
+```
 
-### Bugs
+Once we have our keys, we can encrypt some numbers. 
 
-...
+```
+(def encnum (encrypt pubkey 10))
+; encnum is 37471
 
-### Any Other Sections
-### That You Think
-### Might be Useful
+(def encnum2 (encrypt pubkey 20))
+; encnum2 is 10771
 
-## License
+```
 
-Copyright © 2017 FIXME
+From here, we can add the values together. 
 
-Distributed under the Eclipse Public License either version 1.0 or (at
-your option) any later version.
+```
+(def summednum (add pubkey encnum encnum2))
+; summednum is 463524
+```
+
+Now, to make sure our addition was successful, we can decrypt the summed number.
+
+```
+(decrypt privkey summednum)
+30
+```
+
