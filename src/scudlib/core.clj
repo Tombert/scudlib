@@ -103,8 +103,7 @@
       [
        m (biginteger mm)
        one (biginteger 1)
-       n (:n publickey )
-       n2 (:n2 publickey)
+       {n :n n2 :n2} publickey
        inner (-> n
                  (.multiply m)
                  (.add one)
