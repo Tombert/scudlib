@@ -16,9 +16,7 @@
 (defn makePrivateKey [lambda pubkey]
   (let [
         l (biginteger lambda)
-        n (:n pubkey)
-        np1 (:np1 pubkey)
-        n2 (:n2 pubkey)
+        {n :n np1 :np1 n2 :n2} pubkey 
         one (biginteger 1)
         x (-> np1
               (.modPow l n2)
@@ -54,7 +52,8 @@
       (recur rng)
       (let [
             pub (makePublicKey modulusbits n)
-            lambda (lcm (.subtract p (biginteger 1)) (.subtract q (biginteger 1)))
+            one (biginteger 1)
+            lambda (lcm (.subtract p one) (.subtract q one))
             sec (makePrivateKey lambda pub)
             ]
         {:pub pub :sec sec}
@@ -75,10 +74,9 @@
 (defn getRN [publickey]
   (let [
         rng (new SecureRandom)
+        {n :n bits :bits n2 :n2} publickey
         r (loop []
             (let [
-                  bits (:bits publickey)
-                  n (:n publickey)
                   r (new BigInteger bits 1 rng)]
               (if (>= (.compareTo r n) 0)
                 (recur)
@@ -86,14 +84,17 @@
                 )
               )
             )
-        ] (.modPow r (:n publickey) (:n2 publickey))
+        ] (.modPow r n n2)
   )
 )
 
 (defn randomize [publickey a]
   (let [
-        rn (getRN publickey)]
-    (.mod (.multiply a rn) (:n2 publickey))
+        rn (getRN publickey)
+        n2 (:n2 publickey)
+        
+        ]
+    (.mod (.multiply a rn) n2)
     )
   )
 
@@ -114,11 +115,7 @@
 
 (defn decrypt [privatekey c]
   (let [
-        lambda (:lambda privatekey)
-        pubkey (:pubkey privatekey)
-        n (:n pubkey)
-        n2 (:n2 pubkey)
-        x (:x privatekey)
+        {lambda :lambda x :x {n :n n2 :n2} :pubkey} privatekey
         one (biginteger 1)
        ]
       (-> c
