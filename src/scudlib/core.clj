@@ -103,4 +103,20 @@
     ))
 
 (defn decrypt [privatekey c]
-  (.mod (.multiply (.divide (.subtract (.modPow c (:lambda privatekey) (:n2 (:pubkey privatekey) )) (biginteger 1)) (:n (:pubkey privatekey))) (:x privatekey)) (:n (:pubkey privatekey))))
+  (let [
+        lambda (:lambda privatekey)
+        pubkey (:pubkey privatekey)
+        n (:n pubkey)
+        n2 (:n2 pubkey)
+        x (:x privatekey)
+        one (biginteger 1)
+       ]
+      (-> c
+          (.modPow lambda n2)
+          (.subtract one)
+          (.divide n)
+          (.multiply x)
+          (.mod n)
+          )
+      ))
+
