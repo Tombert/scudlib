@@ -20,7 +20,11 @@
         np1 (:np1 pubkey)
         n2 (:n2 pubkey)
         one (biginteger 1)
-        x (.modInverse (.divide (.subtract (.modPow np1 l n2) one) n) n )
+        x (-> np1
+              (.modPow l n2)
+              (.subtract one)
+              (.divide n)
+              (.modInverse n))
        ]
   {
       :lambda l
