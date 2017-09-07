@@ -6,7 +6,7 @@ On the roadmap is to add other algorithms, and to modularize the functions for g
 
 ## Installation
 
-This is a pretty straightforward install.  Making sure [Leiningen](https://leiningen.org/) is installed, simply clone the repo, and type `lein repl`.
+This is a pretty straightforward install.  Making sure [Leiningen](https://leiningen.org/) is installed, simply clone the repo, and type `lein repl` and then `(use scudlib.paillier)`.
 
 ## Usage
 
