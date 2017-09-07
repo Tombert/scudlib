@@ -98,7 +98,13 @@
       [
        m (biginteger mm)
        one (biginteger 1)
-       inner (.mod (.add (.multiply (:n publickey ) m ) one) (:n2 publickey) )]
+       n (:n publickey )
+       n2 (:n2 publickey)
+       inner (-> n
+                 (.multiply m)
+                 (.add one)
+                 (.mod n2)) 
+       ]
     (randomize publickey inner)
     ))
 
