@@ -1,4 +1,4 @@
-(ns scudlib.core
+(ns scudlib.paillier
   (:gen-class))
 (import java.security.SecureRandom)
 (defn lcm [a b] (.divide (.multiply a b) (.gcd a b)))
